@@ -1,0 +1,42 @@
+conky.config = {
+    alignment = 'top_left',
+    background = false,
+    border_width = 6,
+    --default_color = '#FFFFEC',
+    default_color = 'lightgrey',
+    color5 = '#18cad2',--NavajoWhite
+    double_buffer = true,
+    draw_borders = false,
+    draw_outline = false, -- amplifies text if yes
+    draw_shades = false,
+    font = 'roboto:normal:size=12',
+    gap_x = 100,
+    gap_y = 820,
+    maximum_width  = 320,
+    minimum_width  = 320,
+    no_buffers = true,
+
+    own_window = true,
+    own_window_type = 'dock',
+    own_window_transparent = true,
+    own_window_argb_visual = true,
+    own_window_argb_value = 200,
+    own_window_hints = 'undecorated,below,sticky,skip_taskbar,skip_pager',
+
+    stippled_borders = 2,
+    update_interval = 1.0,
+    uppercase = false, -- set to yes if you want all text to be in uppercase
+    use_spacer = 'right',
+    use_xft = true,
+}
+
+conky.text = [[
+${color5}${font roboto:bold:size=12}GPU ${hr 2}$color$font
+${if_match "${execi 600 lshw -C video | grep vendor | awk '{print $2}'}" == "NVIDIA"}${exec nvidia-smi -q | grep 'Product Name' | awk '{print $4" "$5" "$6}'} $alignr ${exec nvidia-smi -q | grep 'Driver Version' | awk '{print $4}'}
+
+Total Utilization: $alignr ${exec nvidia-smi | awk 'FNR == 9 {print $13}'}
+Temp: $alignr ${nvidia temp}°C
+Core: $alignr ${nvidia gpufreq} MHz
+Mem:  $alignr ${nvidia memfreq} MHz
+RAM:  $alignr ${exec nvidia-smi | awk 'FNR == 9 {print $9" "$10" "$11}'}
+]];
